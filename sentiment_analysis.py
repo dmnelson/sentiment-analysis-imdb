@@ -1,9 +1,11 @@
 from flask import Flask, render_template, request, jsonify
 from lib.classifier import Classifier
+from lib.examples import Examples
 
 print("#" * 80)
 print(" - Starting up application")
 app = Flask(__name__)
+
 print(" - Building new classifier - might take a while.")
 classifier = Classifier().build()
 print("#" * 80)
@@ -20,11 +22,8 @@ def predict():
 
 @app.route('/examples')
 def examples():
-    examples = [
-        dict(q="teste 1", actual=1.0, predicted=0.0),
-        dict(q="teste 2", actual=1.0, predicted=1.0)
-    ]
+    examples = Examples(classifier).load(5, 5)
     return jsonify(items=examples)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, use_reloader=False)
