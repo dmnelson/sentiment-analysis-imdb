@@ -20,5 +20,5 @@ class Vocabulary:
 
     def vectorize(self, text):
         text = text.lower()
-        words = filter(lambda x: x in self.vocab, tokenize(text))
+        words = filter(lambda x: x in self.vocab, self.tokenize(text))
         return [self.vocab[w] for w in words]
