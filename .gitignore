@@ -1,2 +1,3 @@
 dataset/*
 !dataset/.gitkeep
+lib/__pycache__
