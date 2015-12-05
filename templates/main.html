@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Sentiment Analysis</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Latest compiled and minified CSS -->
+    <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">-->
+    <link rel="stylesheet" href="https://bootswatch.com/lumen/bootstrap.css">
+
+    <!-- Optional theme -->
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <style>
+      td { color: #666; }
+      td.danger, td.success { opacity: 0.75; }
+    </style>
+
+    <script type="text/javascript">
+      window.CLASSES = ["Negative", "Positive"]
+      $(function(){
+        $("#predict_form").submit(function(e){
+          e.preventDefault();
+          $("#prediction").hide();
+          $(".progress").fadeIn();
+
+          $.getJSON("/predict",  $(this).serialize(), function(data){
+          }).always(function(){
+            $(".progress").hide();
+          }).success(function(data) {
+            var predictedClass = parseInt(data.predicted_class);
+            $("#predicted_class").text(CLASSES[predictedClass]);
+            $("#predicted_value").text(data.prediction);
+            $("#predicted_query").text(data.q);
+            if(predictedClass == 1) {
+              $("#prediction").removeClass("alert-danger");
+              $("#prediction").addClass("alert-success");
+            } else {
+              $("#prediction").addClass("alert-danger");
+              $("#prediction").removeClass("alert-success");
+            }
+            $("#prediction").fadeIn();
+          });
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="jumbotron">
+        <h1>Sentiment Analysis <small> IMDB Reviews </small></h1>
+        <p>This is a template showcasing the optional theme stylesheet included in Bootstrap. Use it as a starting point to create something more unique by building on or modifying it.</p>
+        <div id="prediction" class="collapse alert alert-success alert-dismissible" role="alert">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <strong>
+            <span id="predicted_class">Positive</span>
+            (<span id="predicted_value"></span>)!
+          </strong>
+          <span id="predicted_query">test</span>
+        </div>
+        <div class="progress collapse">
+          <div class="progress-bar progress-bar-striped progress-bar-info active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+            <span class="sr-only">Loading</span>
+          </div>
+        </div>
+        <form action="/predict" class="form-group-lg" id="predict_form">
+          <div class="input-group">
+            <input type="text" name="q" class="form-control" placeholder="Enter your sentence here, e.g. 'The Godfather is my favorite movie of all times'.">
+            <span class="input-group-btn">
+              <input class="btn btn-info btn-lg" type="submit" value="Classify">
+            </span>
+          </div>
+        </form>
+      </div>
+
+      <div>
+        <h2 class="page-header">Randomly selected examples</h2>
+        <table class="table table-hover table-bordered table-striped">
+          <thead>
+            <tr>
+              <th> Review </th>
+              <th> Actual </th>
+              <th> Expected </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td> "Tokyo Eyes" tells of a 17 year old Japanese girl who falls in like with a man being hunted by her big bro who is a cop. This lame flick is about 50% filler and 50% talk, talk, and more talk. You'll get to see the less than stellar cast of three as they talk on the bus, talk and play video games, talk and get a haircut, talk and walk and walk and talk, talk on cell phones, hang out and talk, etc. as you read subtitles waiting for something to happen. The thin wisp of a story is not sufficient to support a film with low end production value, a meager cast, and no action, no romance, no sex or nudity, no heavy drama...just incessant yadayadayada'ing. (C-) </td>
+              <td class="success"> Positivo </td>
+              <td class="danger"> Negativo </td>
+            </tr>
+            <tr>
+              <td> The best thing about "The Prey" is the tag line..."It's not human and it's got an axe"! The movie itself is a padded stinkaroo....endless insect and wildlife shots make the viewer wanna die! No slasher fan will like this garbage.....Watch "Friday the 13th" again and burn any copy of this film you find! <br /><br />It also rates as one of the 25 worst films ever made!</td>
+              <td class="danger"> Negativo </td>
+              <td class="danger"> Negativo </td>
+            </tr>
+            <tr>
+              <td>
+                I love ghost stories and I will sit through a movie til it's end, even if I'm not really enjoying it. I rarely feel like I wasted my time... BUT, this adaptation of the Bell Witch story was horrible! <br /><br />It wasn't scary in the least bit. What is with the comic relief moments? The dialog was tedious. Acting inconsistent The movie was WAY too long and some scenes were unnecessarily drawn out in my open. (Like the birthday party)<br /><br />The only good think I can think about mentioning is the costumes and props were well done.<br /><br />I am curious about other adaptation, but until then, I will stick to reading about the story.
+              </td>
+              <td class="success"> Positivo </td>
+              <td class="success"> Positivo </td>
+            </tr>
+            <tr>
+              <td>Bill Paxton has taken the true story of the 1913 US golf open and made a film that is about much more than an extra-ordinary game of golf. The film also deals directly with the class tensions of the early twentieth century and touches upon the profound anti-Catholic prejudices of both the British and American establishments. But at heart the film is about that perennial favourite of triumph against the odds.<br /><br />The acting is exemplary throughout. Stephen Dillane is excellent as usual, but the revelation of the movie is Shia LaBoeuf who delivers a disciplined, dignified and highly sympathetic performance as a working class Franco-Irish kid fighting his way through the prejudices of the New England WASP establishment. For those who are only familiar with his slap-stick performances in "Even Stevens" this demonstration of his maturity is a delightful surprise. And Josh Flitter as the ten year old caddy threatens to steal every scene in which he appears.<br /><br />A old fashioned movie in the best sense of the word: fine acting, clear directing and a great story that grips to the end - the final scene an affectionate nod to Casablanca is just one of the many pleasures that fill a great movie.
+              </td>
+              <td class="danger"> Negativo </td>
+              <td class="success"> Positivo </td>
+            </tr>
+            <tr>
+              <td>
+                I was fortunate to attend the London premier of this film. While I am not at all a fan of British drama, I did find myself deeply moved by the characters and the BAD CHOICES they made. I was in tears by the end of the film. Every scene was mesmerizing. The attention to detail and the excellent acting was quite impressive.<br /><br />I would have to agree with some of the other comments here which question why all these women were throwing themselves at such a despicable character.<br /><br />*******SPOLIER ALERT******** I was also hoping that Dylan would have been killed by William when he had the chance! ****END SPOILER*****<br /><br />Keira Knightley did a great job and radiate beauty and innocence from the screen, but it was Sienna Miller's performance that was truly Oscar worthy.<br /><br />I am sure this production will be nominated for other awards.
+              </td>
+              <td class="danger"> Negativo </td>
+              <td class="success"> Positivo </td>
+            </tr>
+            <tr>
+              <td>
+                Despite the title and unlike some other stories about love and war, this film isn't too sticky and pink, because love is as a rose: With thorns, that is. The four leading actors set their characters realistic and with a good sense and balance between the tragic and the down-to-earth. <br /><br />The music and lyrics of the cabaret/chanson-esquire songs (sung b Keira Knightley herself) drag the viewer deeper and deeper in the film, from one place to another, between the brutal war and amongst the peaceful love. Some people may find it too much a biopic, but it ís mostly a romantic story, even though it consequently follows the life of Dylan Thomas and the triangular relationship which is steeped by joy and jealousy. <br /><br />London gets visualized from another angle for once, the bohemian life of Dylan during the bombings of the Germans is set in a floating atmosphere of small bedrooms, pubs and bars. The independent women, the soldier and the charismatic poet are constantly swept in both feelings of love and anger. <br /><br />Maybe the end is too twisted and hangs somewhat loosely to the rest of the film, but all in all this is a great romantic story.
+              </td>
+              <td class="success"> Positivo </td>
+              <td class="danger"> Positivo </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </body>
+</html>
