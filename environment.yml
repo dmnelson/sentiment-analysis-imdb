@@ -4,6 +4,8 @@ dependencies:
   - gunicorn
   - scipy
   - numpy
+  - h5py
+  - hdf5
   - theano
   - pip:
     - keras
