@@ -20,10 +20,14 @@
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
     <style>
-      td { color: #666; }
+      .table { table-layout:fixed; }
+      td.text { color: #666; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: pointer; }
+      td.text.hover { white-space: normal; overflow: visible;  }
       td.danger, td.success { opacity: 0.75; }
       .alert { font-size: 120% }
       .notice { color: #999; padding-top: 10px; margin-bottom: -15px; }
+      body { background: #333 }
+      .container { background: #fff; padding: 15px; }
     </style>
 
     <script type="text/javascript">
@@ -64,7 +68,8 @@
         },
         add: function(q, actual, predicted) {
           $line = $("<tr>")
-            $line.append($("<td>").html(q));
+            $div = $("<div>").html(q)
+            $line.append($("<td class='text'>").text($div.text()));
             $line.append(examples.classCell(actual));
             $line.append(examples.classCell(predicted));
             $(".example_items").append($line);
@@ -101,6 +106,10 @@
         $.getJSON("/examples").done(function(data) {
           examples.addAll(data.items);
           examples.show()
+
+          $("td.text").click(function(){
+            $(this).toggleClass("hover",10000)
+          });
         });
       });
     </script>
@@ -109,7 +118,7 @@
     <div class="container">
       <div class="jumbotron">
         <h1>Sentiment Analysis <small> IMDB Reviews </small></h1>
-        <p>Showcase of a project developed for the Natural Language Processing course at UFMG. This aims to classify movie reviews based on knowledge acquired by training a recurrent neural network, LSTM, on IMDB reviews database.</p>
+        <p>Showcase of a project developed for the Natural Language Processing course at UFMG. This aims to classify movie reviews based on knowledge acquired by training a recurrent neural network (LSTM) on IMDB reviews database.</p>
         <div id="prediction" class="collapse alert alert-success alert-dismissible" role="alert">
           <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
           <strong>
@@ -143,7 +152,7 @@
         <table class="table table-hover table-bordered table-striped">
           <thead>
             <tr>
-              <th> Review </th>
+              <th width="70%"> Review </th>
               <th> Actual </th>
               <th> Expected </th>
             </tr>
@@ -153,6 +162,9 @@
           </tbody>
         </table>
       </div>
+      <hr>
+      <h3 class="page-header">References</h3>
+      <p><strong>A. L. Maas, R. E. Daly, P. T. Pham, D. Huang, A. Y. Ng, and C. Potts.</strong> Learning word vectors for sentiment analysis. In <em>Proceedings of the 49th Annual Meeting of the Association for Computational Linguistics: Human Language Technologies</em>, pages 142-150, Portland, Oregon, USA, June 2011. Association for Computational Linguistics <a class="url" href="http://www.aclweb.org/anthology/P11-1015">(view online)</a>.</p>
     </div>
   </body>
 </html>
