@@ -1,8 +1,10 @@
 from flask import Flask, render_template, request, jsonify
 from lib.classifier import Classifier
 from lib.examples import Examples
+import threading
 
 print(" - Starting up application")
+lock = threading.Lock()
 app = Flask(__name__)
 
 class App:
@@ -11,11 +13,16 @@ class App:
         self.__dict__ = self.__shared_state
 
     def classifier(self):
-        if getattr(self, '_classifier', None) == None:
-            print(" - Building new classifier - might take a while.")
-            self._classifier = Classifier().build()
-            print(" - Done!")
-        return self._classifier
+        with lock:
+            if getattr(self, '_classifier', None) == None:
+                print(" - Building new classifier - might take a while.")
+                self._classifier = Classifier().build()
+                print(" - Done!")
+            return self._classifier
+
+t = threading.Thread(target=App().classifier)
+t.daemon = True
+t.start()
 
 @app.route('/')
 def main():
