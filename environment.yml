@@ -1,0 +1,9 @@
+name: sent-an
+dependencies:
+  - flask
+  - gunicorn
+  - scipy
+  - numpy
+  - theano
+  - pip:
+    - keras

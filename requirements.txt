@@ -1,0 +1,4 @@
+Flask==0.10.1
+gensim==0.12.3
+gunicorn==19.4.1
+Keras==0.3.0
