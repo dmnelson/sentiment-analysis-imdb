@@ -66,19 +66,19 @@
         show: function() {
           $(".examples").fadeIn(1500);
         },
-        add: function(q, actual, predicted) {
+        add: function(q, predicted, real) {
           $line = $("<tr>")
             $div = $("<div>").html(q)
             $line.append($("<td class='text'>").text($div.text()));
-            $line.append(examples.classCell(actual));
             $line.append(examples.classCell(predicted));
+            $line.append(examples.classCell(real));
             $(".example_items").append($line);
         },
         addAll: function(items) {
           $.each(items, function(i, item){
-              actual = parseInt(item.actual);
-              expected = parseInt(item.expected);
-              examples.add(item.q, actual, expected);
+              predicted = parseInt(item.predicted);
+              real = parseInt(item.real);
+              examples.add(item.q, predicted, real);
           });
         },
         classCell: function(value){
@@ -118,7 +118,8 @@
     <div class="container">
       <div class="jumbotron">
         <h1>Sentiment Analysis <small> IMDB Reviews </small></h1>
-        <p>Showcase of a project developed for the Natural Language Processing course at UFMG. This aims to classify movie reviews based on knowledge acquired by training a recurrent neural network (LSTM) on IMDB reviews database.</p>
+        <p>Showcase of a project developed for the Natural Language Processing course at UFMG. This aims to classify movie reviews based on knowledge acquired by training a recurrent neural network (LSTM) on the IMDB reviews database.</p>
+        <p>The text field below can be used to test the algorithm by classifying sentences representing hypothetical movie reviews, for example "I liked the movie" or "That movie was really boring". Further below on the page there are some examples extracted from the dataset comparing the performance of the algorithm to the actual polarity.</p>
         <div id="prediction" class="collapse alert alert-success" role="alert">
           <strong>
             <span id="predicted_class">Positive</span>
@@ -152,8 +153,8 @@
           <thead>
             <tr>
               <th width="70%"> Review </th>
+              <th> Predicted </th>
               <th> Actual </th>
-              <th> Expected </th>
             </tr>
           </thead>
           <tbody class="example_items">

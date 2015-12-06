@@ -16,7 +16,7 @@ class Examples:
         predictions = []
         for X, y in data:
             label, _ = self.classifier.classify(X)
-            predictions.append(dict(q=X, actual=label, expected=y))
+            predictions.append(dict(q=X, predicted=label, real=y))
         return predictions
 
     def load_dir(self, dirname, label, size):
