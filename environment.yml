@@ -2,7 +2,7 @@ name: sent-an
 dependencies:
   - python=3.4  
   - flask
-  - gunicorn
+  - waitress
   - scipy
   - numpy
   - h5py
