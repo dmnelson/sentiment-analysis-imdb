@@ -1,0 +1,3 @@
+templates/* linguist-documentation
+static/* linguist-documentation
+static/vendor/* linguist-vendored
