@@ -1,0 +1,8 @@
+.table { table-layout:fixed; }
+td.text { color: #666; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: pointer; }
+td.text.hover { white-space: normal; overflow: visible;  }
+td.danger, td.success { opacity: 0.75; }
+.alert { font-size: 120% }
+.notice { color: #999; padding-top: 10px; margin-bottom: -15px; }
+body { background: #333 }
+.container { background: #fff; padding: 15px; }

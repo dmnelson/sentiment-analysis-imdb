@@ -5,113 +5,19 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="static/vendor/bootstrap.lumen.min.css">
 
-    <!-- Optional theme -->
-    <!-- Latest compiled and minified JavaScript -->
+    <link rel="stylesheet" href="static/vendor/bootstrap.lumen.min.css">
+    <link rel="stylesheet" href="static/style.css">
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="static/app.js"></script>
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
-    <style>
-      .table { table-layout:fixed; }
-      td.text { color: #666; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: pointer; }
-      td.text.hover { white-space: normal; overflow: visible;  }
-      td.danger, td.success { opacity: 0.75; }
-      .alert { font-size: 120% }
-      .notice { color: #999; padding-top: 10px; margin-bottom: -15px; }
-      body { background: #333 }
-      .container { background: #fff; padding: 15px; }
-    </style>
-
-    <script type="text/javascript">
-      window.CLASSES = ["Negative", "Positive"]
-      window.CSS_CLASSES = ["danger", "success"]
-
-      var progressBar = {
-        show: function() {
-          $(".progress").fadeIn();
-        },
-        hide: function() {
-          $(".progress").hide();
-        }
-      };
-
-      var prediction = {
-        set: function(q, predictedValue, predictedClass) {
-          $("#predicted_class").text(CLASSES[predictedClass]);
-          $("#predicted_value").text(predictedValue);
-          $("#predicted_query").text(q);
-          prediction.toggleClasses(predictedClass);
-        },
-        toggleClasses: function(predictedClass) {
-          $("#prediction").removeClass("alert-" + CSS_CLASSES[1 - predictedClass]);
-          $("#prediction").addClass("alert-" + CSS_CLASSES[predictedClass]);
-        },
-        show: function() {
-          $("#prediction").fadeIn();
-        },
-        hide: function() {
-          $("#prediction").hide();
-        }
-      };
-
-      var examples = {
-        show: function() {
-          $(".examples").fadeIn(1500);
-        },
-        add: function(q, predicted, real) {
-          $line = $("<tr>")
-            $div = $("<div>").html(q)
-            $line.append($("<td class='text'>").text($div.text()));
-            $line.append(examples.classCell(predicted));
-            $line.append(examples.classCell(real));
-            $(".example_items").append($line);
-        },
-        addAll: function(items) {
-          $.each(items, function(i, item){
-              predicted = parseInt(item.predicted);
-              real = parseInt(item.real);
-              examples.add(item.q, predicted, real);
-          });
-        },
-        classCell: function(value){
-          return $("<td>").text(CLASSES[value]).addClass(CSS_CLASSES[value]);
-        }
-      }
-
-      $(function(){
-        $("#predict_form").submit(function(e){
-          e.preventDefault();
-          prediction.hide();
-          progressBar.show();
-
-          $.getJSON("/predict",  $(this).serialize()).
-            always(function(){
-              progressBar.hide();
-            }).
-            done(function(data) {
-              var predictedClass = parseInt(data.predicted_class);
-              prediction.set(data.q, data.prediction, predictedClass);
-              prediction.show();
-            });
-        });
-
-        $.getJSON("/examples").done(function(data) {
-          examples.addAll(data.items);
-          examples.show()
-
-          $("td.text").click(function(){
-            $(this).toggleClass("hover",10000)
-          });
-        });
-      });
-    </script>
   </head>
   <body>
     <div class="container">
